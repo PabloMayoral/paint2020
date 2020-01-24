@@ -6,7 +6,9 @@
 package codigo;
 
 import codigo.formas.Circulo;
-import java.awt.BasicStroke;
+import codigo.formas.Estrella;
+import codigo.formas.Formas;
+import codigo.formas.pentagono;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,15 +20,13 @@ import java.awt.image.BufferedImage;
  */
 public class ventanaPaint extends javax.swing.JFrame {
 
-    BufferedImage buffer = null;
+    BufferedImage buffer, buffer2 = null;
 
-    Graphics2D bufferGraphics, jpanelGraphics = null;
+    Graphics2D bufferGraphics, bufferGraphics2, jpanelGraphics = null;
 
-    int herramientaSeleccionada = 0;
     Circulo miCirculo = null;
 
-    BasicStroke trazo1 = new BasicStroke(15);
-    BasicStroke trazo2 = new BasicStroke(15, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{10.0f}, 0.0f);
+    Formas miForma = new Formas(-1, -1, 1, Color.WHITE, false);
 
     /**
      * Creates new form ventanaPaint
@@ -39,11 +39,17 @@ public class ventanaPaint extends javax.swing.JFrame {
     private void inicializaBuffers() {
 //creo una imagen del mismo ancho y alto que el jpanel
         buffer = (BufferedImage) jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
+        buffer2 = (BufferedImage) jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
+
         //cero una imagen modificable
         bufferGraphics = buffer.createGraphics();
+        bufferGraphics2 = buffer2.createGraphics();
+
         //inicializo el buffer para que se pinte de blanco entero
         bufferGraphics.setColor(Color.white);
         bufferGraphics.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        bufferGraphics2.setColor(Color.white);
+        bufferGraphics2.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
         //enlazamos el jpanel1 con el jpanelgraphics
         jpanelGraphics = (Graphics2D) jPanel1.getGraphics();
     }
@@ -79,6 +85,9 @@ public class ventanaPaint extends javax.swing.JFrame {
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jPanel1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jPanel1MouseReleased(evt);
             }
         });
 
@@ -125,13 +134,24 @@ public class ventanaPaint extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
-        switch (herramientaSeleccionada) {
+
+        bufferGraphics.drawImage(buffer2, 0, 0, null);
+        switch (herramientas1.formaElegida) {
             case 0:
-                bufferGraphics.setColor(colores1.colorSeleccionado);
-                bufferGraphics.fillOval(evt.getX(), evt.getY(), 10, 10);
+                bufferGraphics2.setColor(colores1.colorSeleccionado);
+                bufferGraphics2.fillOval(evt.getX(), evt.getY(), 10, 10);
 
                 break;
-            case 1: miCirculo.dibujate(bufferGraphics, evt.getX());
+            case 1:
+                miCirculo.dibujate(bufferGraphics, evt.getX());
+                break;
+            case 5:
+
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
+            case 256:
+
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
 
     }//GEN-LAST:event_jPanel1MouseDragged
@@ -142,12 +162,29 @@ public class ventanaPaint extends javax.swing.JFrame {
             case 0:
                 break;
             case 1:
-                miCirculo = new Circulo(evt.getX(), evt.getY(), 1, colores1.colorSeleccionado, false);
+                miCirculo = new Circulo(evt.getX(), evt.getY(), 1, colores1.colorSeleccionado, herramientas1.relleno);
                 miCirculo.dibujate(bufferGraphics, evt.getX());
+                break;
+            case 5:
+                miForma = new pentagono(evt.getX(), evt.getY(), 5, colores1.colorSeleccionado, herramientas1.relleno);
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
+            case 256:
+                miForma = new Estrella(evt.getX(), evt.getY(), 256, colores1.colorSeleccionado, herramientas1.relleno);
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
 
         }
     }//GEN-LAST:event_jPanel1MousePressed
+
+    private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
+        miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
+        //si se dibuja el circulo se dibuja en el buffergraphics2
+        if (herramientas1.formaElegida == 1) {
+            miCirculo.dibujate(bufferGraphics2, evt.getX());
+
+        }
+    }//GEN-LAST:event_jPanel1MouseReleased
 
     /**
      * @param args the command line arguments

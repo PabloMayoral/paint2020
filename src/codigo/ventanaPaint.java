@@ -10,6 +10,9 @@ import codigo.formas.Cuadrado;
 import codigo.formas.Estrella;
 import codigo.formas.Formas;
 import codigo.formas.Linea;
+import codigo.formas.Pincel;
+import codigo.formas.Recta.TiraLineas;
+import codigo.formas.Spray;
 import codigo.formas.pentagono;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -42,6 +45,9 @@ public class ventanaPaint extends javax.swing.JFrame {
     BasicStroke trazo1 = new BasicStroke(15);
     BasicStroke trazo2 = new BasicStroke(15, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{10.0f}, 0.0f);
 
+    Pincel miPincel = null;
+    TiraLineas miTiraLineas = null;
+    Spray miSpray = null;
     /**
      * Creates new form ventanaPaint
      */

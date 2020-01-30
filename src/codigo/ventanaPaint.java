@@ -7,12 +7,14 @@ package codigo;
 
 import codigo.formas.Circulo;
 import codigo.formas.Cuadrado;
+import codigo.formas.DibujoLibre;
 import codigo.formas.Estrella;
 import codigo.formas.Formas;
 import codigo.formas.Linea;
 import codigo.formas.Pincel;
-import codigo.formas.Recta.TiraLineas;
+import codigo.formas.Recta;
 import codigo.formas.Spray;
+import codigo.formas.Triangulo;
 import codigo.formas.pentagono;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -37,6 +39,7 @@ public class ventanaPaint extends javax.swing.JFrame {
     Circulo miCirculo = null;
 
     Formas miForma = new Formas(-1, -1, 1, Color.WHITE, false);
+    DibujoLibre dibujoLibre = null;
 
     int posLapizX = 0;
     int posLapizY = 0;
@@ -46,8 +49,9 @@ public class ventanaPaint extends javax.swing.JFrame {
     BasicStroke trazo2 = new BasicStroke(15, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{10.0f}, 0.0f);
 
     Pincel miPincel = null;
-    TiraLineas miTiraLineas = null;
+    Recta miRecta = null;
     Spray miSpray = null;
+
     /**
      * Creates new form ventanaPaint
      */
@@ -219,14 +223,14 @@ public class ventanaPaint extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(42, 42, 42)
-                        .addComponent(colores1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(colores1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,11 +252,14 @@ public class ventanaPaint extends javax.swing.JFrame {
 
         bufferGraphics.drawImage(buffer2, 0, 0, null);
         switch (herramientas1.formaElegida) {
-            case 0:
-                bufferGraphics2.setColor(colores1.colorSeleccionado);
-                bufferGraphics2.fillOval(evt.getX(), evt.getY(), 10, 10);
-
-                break;
+            
+               case 0: dibujoLibre.dibujate (bufferGraphics, evt.getX(), evt.getY());
+                    break;
+// case 0 : 
+//                bufferGraphics2.setColor(colores1.colorSeleccionado);
+//                bufferGraphics2.fillOval(evt.getX(), evt.getY(), 4, 4);
+//                break;
+                
             case 1:
                 miCirculo.dibujate(bufferGraphics, evt.getX());
                 break;
@@ -269,16 +276,25 @@ public class ventanaPaint extends javax.swing.JFrame {
                 break;
             case 2:
                 miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
-		// Sobreescribe el lienzo
-		
-
+                break;
+            case 3:
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
+            case 6:
+                miRecta.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+                break;
+            case 7:
+                miPincel.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+                break;
     }//GEN-LAST:event_jPanel1MouseDragged
         repaint(0, 0, 1, 1);
     }
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         switch (herramientas1.formaElegida) {
-            case 0:
-                break;
+             case 0: dibujoLibre = new DibujoLibre(evt.getX(), evt.getY(), colores1.colorSeleccionado);
+                    dibujoLibre.dibujate (bufferGraphics, evt.getX(), evt.getY());
+                 
+                    break;
             case 1:
                 miCirculo = new Circulo(evt.getX(), evt.getY(), 1, colores1.colorSeleccionado, herramientas1.relleno);
                 miCirculo.dibujate(bufferGraphics, evt.getX());
@@ -293,21 +309,46 @@ public class ventanaPaint extends javax.swing.JFrame {
                 break;
             case 4:
                 miForma = new Cuadrado(evt.getX(), evt.getY(), colores1.colorSeleccionado, herramientas1.relleno);
-		break;
-                 case 2:
-		miForma = new Linea(evt.getX(), evt.getY(), colores1.colorSeleccionado, herramientas1.relleno);
-		break;
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
 
-              
+                break;
+            case 2:
+                miForma = new Linea(evt.getX(), evt.getY(), colores1.colorSeleccionado, herramientas1.relleno);
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+
+                break;
+            case 3:
+                miForma = new Triangulo(evt.getX(), evt.getY(), 4, colores1.colorSeleccionado, herramientas1.relleno);
+                miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+
+                break;
+            case 6:
+                miRecta = new Recta(evt.getX(), evt.getY(), colores1.colorSeleccionado);
+                miRecta.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+                break;
+            case 7:
+                 if (herramientas1.goma) {
+                    miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionadoGoma);
+                } else {
+                    miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionado);
+                }
+
+                miPincel.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
+       
+
+        //si se dibuja el circulo se dibuja en el buffergraphics2
+        miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
         //si se dibuja el circulo se dibuja en el buffergraphics2
         if (herramientas1.formaElegida == 1) {
             miCirculo.dibujate(bufferGraphics2, evt.getX());
 
+        } else if (herramientas1.formaElegida == 6) {
+            miRecta.dibujate(bufferGraphics2, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
         }
     }//GEN-LAST:event_jPanel1MouseReleased
 
@@ -334,9 +375,9 @@ public class ventanaPaint extends javax.swing.JFrame {
             if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("png")) {
 
                 try {
-                    bufferGraphics.drawImage(ImageIO.read(fichero), 0,0, null);
-                      bufferGraphics2.drawImage(ImageIO.read(fichero), 0,0, null);
-                      repaint(0,0,1,1);
+                    bufferGraphics.drawImage(ImageIO.read(fichero), 0, 0, null);
+                    bufferGraphics2.drawImage(ImageIO.read(fichero), 0, 0, null);
+                    repaint(0, 0, 1, 1);
                 } catch (IOException o) {
 
                 }

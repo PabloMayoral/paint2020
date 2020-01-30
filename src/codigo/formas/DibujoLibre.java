@@ -9,29 +9,27 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Stroke;
 
 /**
  *
  * @author pmart
  */
-
- public class Recta extends Polygon {
-    //Nos indican los puntos desde los que parten las líneas
-    public int x, y;
-    //Color del que se pintará la línea
-    public Color color;
-    
-    public Recta (int posX, int posY, Color _color ) {
-        x = posX;
-        y = posY;
+public class DibujoLibre extends Polygon{
+    public Color color = null;
+    public int x = 0;
+    public int y = 0;
+    Stroke stroke = new BasicStroke();
+    public DibujoLibre (int posX, int posY, Color _color){
+        this.x = posX;
+        this.y = posY;
         color = _color;
     }
     
-    public void dibujate(Graphics2D g2, int posX, int posY ,int grosor) {
+    public void dibujate (Graphics2D g2, int posX, int posY){
         g2.setColor(color);
-        g2.setStroke(new BasicStroke(grosor));
         g2.drawLine(posX, posY, x, y);
+        x = posX;
+        y = posY;
     }
 }
-   
-

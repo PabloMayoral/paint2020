@@ -14,6 +14,8 @@ import javax.swing.JLabel;
  */
 public class colores extends javax.swing.JPanel {
 public Color colorSeleccionado = Color.black;
+  public Color colorSeleccionadoGoma = Color.white;//Color con el que se borra
+    public Color aux= Color.white;//Guardaremos el color cuando cambiemos el pintar por el borrar
     /**
      * Creates new form colores
      */

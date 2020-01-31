@@ -18,6 +18,7 @@ public class Herramientas extends javax.swing.JPanel {
     public boolean relleno = false;
     int lineaGrosor = 1;
     boolean goma = false;
+   
 
     /**
      * Creates new form Herramientas
@@ -121,6 +122,17 @@ public class Herramientas extends javax.swing.JPanel {
 
         jCheckBox3.setText("Efecto");
 
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
+        jSpinner1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jSpinner1MouseReleased(evt);
+            }
+        });
+
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/trazo.png"))); // NOI18N
         jButton6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -155,6 +167,11 @@ public class Herramientas extends javax.swing.JPanel {
 
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/spray.png"))); // NOI18N
         jButton10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
 
         jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pincel.png"))); // NOI18N
         jButton11.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -292,7 +309,8 @@ public class Herramientas extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jSlider1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseDragged
-        jSpinner1.setValue(jSlider1.getValue());
+       jSpinner1.setValue(jSlider1.getValue());
+       
     }//GEN-LAST:event_jSlider1MouseDragged
 
     private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
@@ -308,6 +326,20 @@ public class Herramientas extends javax.swing.JPanel {
        formaElegida = 7;
        goma = true;
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+       formaElegida = 8;
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        	jSlider1.setValue((int) jSpinner1.getValue());
+
+    }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void jSpinner1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSpinner1MouseReleased
+
+
+    }//GEN-LAST:event_jSpinner1MouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

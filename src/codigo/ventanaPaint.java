@@ -51,6 +51,7 @@ public class ventanaPaint extends javax.swing.JFrame {
     Pincel miPincel = null;
     Recta miRecta = null;
     Spray miSpray = null;
+    
 
     /**
      * Creates new form ventanaPaint
@@ -252,14 +253,16 @@ public class ventanaPaint extends javax.swing.JFrame {
 
         bufferGraphics.drawImage(buffer2, 0, 0, null);
         switch (herramientas1.formaElegida) {
-            
-               case 0: dibujoLibre.dibujate (bufferGraphics, evt.getX(), evt.getY());
-                    break;
-// case 0 : 
+
+//               case 0: dibujoLibre.dibujate (bufferGraphics, evt.getX(), evt.getY());
+//                    break;
+            case 0:
 //                bufferGraphics2.setColor(colores1.colorSeleccionado);
 //                bufferGraphics2.fillOval(evt.getX(), evt.getY(), 4, 4);
-//                break;
-                
+                                miPincel.dibujate(bufferGraphics2, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+
+                break;
+
             case 1:
                 miCirculo.dibujate(bufferGraphics, evt.getX());
                 break;
@@ -268,7 +271,6 @@ public class ventanaPaint extends javax.swing.JFrame {
                 miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
             case 256:
-
                 miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
             case 4:
@@ -284,17 +286,24 @@ public class ventanaPaint extends javax.swing.JFrame {
                 miRecta.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
                 break;
             case 7:
-                miPincel.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+                miPincel.dibujate(bufferGraphics2, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
                 break;
     }//GEN-LAST:event_jPanel1MouseDragged
         repaint(0, 0, 1, 1);
     }
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         switch (herramientas1.formaElegida) {
-             case 0: dibujoLibre = new DibujoLibre(evt.getX(), evt.getY(), colores1.colorSeleccionado);
-                    dibujoLibre.dibujate (bufferGraphics, evt.getX(), evt.getY());
-                 
-                    break;
+            case 0:
+//                dibujoLibre = new DibujoLibre(evt.getX(), evt.getY(), colores1.colorSeleccionado);
+//                dibujoLibre.dibujate(bufferGraphics, evt.getX(), evt.getY());
+  if (herramientas1.goma) {
+                    miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionadoGoma);
+                } else {
+                    miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionado);
+                }
+
+                miPincel.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
+                break;
             case 1:
                 miCirculo = new Circulo(evt.getX(), evt.getY(), 1, colores1.colorSeleccionado, herramientas1.relleno);
                 miCirculo.dibujate(bufferGraphics, evt.getX());
@@ -327,7 +336,7 @@ public class ventanaPaint extends javax.swing.JFrame {
                 miRecta.dibujate(bufferGraphics, evt.getX(), evt.getY(), herramientas1.lineaGrosor);
                 break;
             case 7:
-                 if (herramientas1.goma) {
+                if (herramientas1.goma) {
                     miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionadoGoma);
                 } else {
                     miPincel = new Pincel(evt.getX(), evt.getY(), colores1.colorSeleccionado);
@@ -339,7 +348,6 @@ public class ventanaPaint extends javax.swing.JFrame {
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
-       
 
         //si se dibuja el circulo se dibuja en el buffergraphics2
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());

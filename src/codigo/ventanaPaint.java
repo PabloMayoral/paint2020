@@ -20,10 +20,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFileChooser;
 
 /**
@@ -87,7 +90,55 @@ public class ventanaPaint extends javax.swing.JFrame {
         // pinto el buffer sobre el jpanel
         jpanelGraphics.drawImage(buffer, 0, 0, null);
     }
+  private void guarda() {
+	int seleccion = jFileChooser1.showSaveDialog(this);
+	if (seleccion == JFileChooser.APPROVE_OPTION) {
+	    //Botón de guardar presionado en cualquier JFileChooser
+	    File fichero = jFileChooser1.getSelectedFile();
+	    String nombre = fichero.getName();
+	    String extension = nombre.substring(nombre.lastIndexOf('.') + 1);
+	    if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("png")) {
+		try {
+		    ImageIO.write(buffer, extension, fichero);
+		} catch (IOException e) {
+		}
+	    }
+	}
+    }
 
+
+    private void carga() {
+	int seleccion = jFileChooser1.showOpenDialog(this);
+	if (seleccion == JFileChooser.APPROVE_OPTION) {
+	    File fichero = jFileChooser1.getSelectedFile();
+	    String nombre = fichero.getName();
+	    String extension = nombre.substring(nombre.lastIndexOf('.') + 1);
+	    BufferedImage imagen = null;
+	    if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("png")) {
+		try {
+		    imagen = ImageIO.read(fichero);
+		    bufferGraphics.drawImage(imagen, 0, 0, null);
+		    bufferGraphics2.drawImage(imagen, 0, 0, null);
+		    repaint();
+		} catch (IOException e) {
+		}
+	    }
+	}
+    }
+
+    Action saveAction = new AbstractAction("Save") {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    guarda();
+	}
+    };
+
+    Action loadAction = new AbstractAction("Load") {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    carga();
+	}
+    };
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,7 +162,7 @@ public class ventanaPaint extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jButton2.setText("CANCELAR");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -189,7 +240,7 @@ public class ventanaPaint extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 304, Short.MAX_VALUE)
+            .addGap(0, 352, Short.MAX_VALUE)
         );
 
         jButton1.setText("color mix");
@@ -202,6 +253,11 @@ public class ventanaPaint extends javax.swing.JFrame {
         jMenu1.setText("File");
 
         jMenuItem1.setText("Guardar");
+        jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jMenuItem1MousePressed(evt);
+            }
+        });
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -209,10 +265,20 @@ public class ventanaPaint extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        jMenuItem2.setText("Cargar");
+        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jMenuItem2MousePressed(evt);
+            }
+        });
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -236,10 +302,12 @@ public class ventanaPaint extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(herramientas1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(colores1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -395,6 +463,18 @@ public class ventanaPaint extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MousePressed
+       carga();
+    }//GEN-LAST:event_jMenuItem2MousePressed
+
+    private void jMenuItem1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MousePressed
+        guarda();
+    }//GEN-LAST:event_jMenuItem1MousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -441,9 +521,9 @@ public class ventanaPaint extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog2;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
